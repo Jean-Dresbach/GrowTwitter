@@ -12,8 +12,8 @@ export class User {
         this.followers = []
         this.tweets = []
 
-        if (users.find(user => user.username == this._username)) {
-            throw new Error("This username already exist!");
+        if (users.find(user => user.username === this._username)) {
+            throw new Error("This username already exist!")
         }
 
         users.push(this)
@@ -23,12 +23,17 @@ export class User {
         return this._username
     }
 
-    sendTweet(content: string): string {
-        const newTweet = new Tweet(content, "normal")
-        this.tweets.push(newTweet)
-        console.log("New tweet added!")
+    sendTweet(content: string): Tweet {
+        try {
+            const newTweet = new Tweet(content, "normal", this._username)
+            this.tweets.push(newTweet)
+            console.log("New tweet added!")
+            return newTweet
+        } catch (error) {
+            console.log(error.message)
+            return null
+        }
 
-        return newTweet.id
     }
 
     follow(user: User) {
@@ -55,9 +60,6 @@ export class User {
     }
 
     showTweets() {
-        this.tweets.forEach(tweet => {
-            console.log(`@${this.username}: ${tweet.content}`)
-
-        })
+        this.tweets.forEach(tweet => tweet.showReplies())
     }
 }

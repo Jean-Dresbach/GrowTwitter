@@ -10,10 +10,6 @@ function createUser(name: string, username: string, email: string, password: str
     }
 }
 
-// function createTweet(content: string) {
-//     return new Tweet(content, "normal")
-// }
-
 const user1 = createUser("JEAN", "jean", "jean@gmai.com", "1234abcd")
 const user2 = createUser("JOÃO", "joão", "joao@gmai.com", "1234abcd")
 const user3 = createUser("Daphne", "daphne", "daphne@gamil.com", "1234abcd")
@@ -29,8 +25,21 @@ user2.follow(user3)
 user3.showFollowers()
 
 
-const tweet1Id = user1.sendTweet("Olá mundo")
-const tweet2Id = user1.sendTweet("Olá Growdevers")
-const tweet3Id = user1.sendTweet("Growdev é TOP!")
+const tweet1 = user1.sendTweet("Olá mundo")
+const tweet2 = user1.sendTweet("Olá Growdevers")
+const tweet3 = user1.sendTweet("Growdev é TOP!")
+
+tweet1.like("jean")
+// Exemple of a user liking a tweet more than once
+// tweet1.like("jean")
+tweet1.show()
+
+tweet3.reply("É verdade esse bilhete!", "jean")
+tweet3.reply("É verdade esse bilhete!", "joão")
+tweet3.showReplies()
+tweet3.like("joão")
+tweet3.like("jean")
+tweet3.like("daphne")
+tweet3.showReplies()
 
 user1.showTweets()
