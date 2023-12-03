@@ -1,24 +1,32 @@
 import { randomUUID } from "crypto"
-import { users } from "../database/users"
+import { tweetAccounts } from "../database/tweetAccounts"
+import { Like } from "./Like" 
 
 type TweetType = "normal" | "reply"
 
 export class Tweet {
-    private _id: string
+    private id: string
     private replies: Tweet[]
-    private likes: string[]
+    private likes: Like[]
+    private _timeOfCreation: Date
 
-    constructor(private _content: string, private type: TweetType, private tweetOwner: string) {
-        this._id = randomUUID()
+    constructor(private _content: string, private type: TweetType, private tweetOwnerUsername: string) {
+        this.id = randomUUID()
         this.replies = []
         this.likes = []
+        this._timeOfCreation = new Date()
 
-        if (!users.find(user => user.username == this.tweetOwner)) {
+        if (!tweetAccounts.find(tweetAccount => tweetAccount.username == this.tweetOwnerUsername)) {
             throw new Error("User not found")
         }
+
     }
 
-    reply(content: string, username: string): Tweet {
+    get timeOfCreation(): Date {
+        return this._timeOfCreation
+    }
+
+    reply(content: string, username: string): Tweet | null {
         try {
             const newReply = new Tweet(content, "reply", username)
             this.replies.push(newReply)
@@ -29,36 +37,34 @@ export class Tweet {
         }
     }
 
-    like(username: string) {
-        try {
-            if (!users.find(user => user.username === username)) {
-                throw new Error("User not found")
-            }
-            if (this.likes.find(like => like === username)) {
+    like(username: string): void | null {
+        try {            
+            if (this.likes.find(like => like.likesOwnerUsername === username)) {
                 throw new Error("This user already liked this tweet")
             }
-            this.likes.push(username)
+            this.likes.push(new Like(username))
+            console.log("Like added")
         } catch (error) {
             console.log(error.message)
             return null
         }
     }
 
-    show() {
-        console.log(`@${this.tweetOwner}: ${this._content}`)
+    show(): void {
+        console.log(`@${this.tweetOwnerUsername}: ${this._content}`)
         if (this.likes.length !== 0) {
             if (this.likes.length === 1) {
-                this.likes.forEach(like => console.log(`[${like === this.tweetOwner ? "You" : "@" + like} liked this!]`))
+                this.likes.forEach(like => console.log(`[${like.likesOwnerUsername === this.tweetOwnerUsername ? "You" : "@" + like.likesOwnerUsername} liked this!]`))
             } else {
-                console.log(`[${this.likes[0] === this.tweetOwner ? "You" : "@" + this.likes[0]} and other ${this.likes.length - 1} user(s) liked this!]`)
+                console.log(`[${this.likes[0].likesOwnerUsername === this.tweetOwnerUsername ? "You" : "@" + this.likes[0].likesOwnerUsername} and other ${this.likes.length - 1} user(s) liked this]`)
             }
         }
         this.replies.length === 0 ? console.log("------------------------------------------------------") : ""
     }
 
-    showReplies() {
+    showReplies(): void {
         this.show()
-        this.replies.forEach(reply => console.log(`   > ${this.tweetOwner === reply.tweetOwner ? "You" : "@" + reply.tweetOwner}: ${reply._content}`))
+        this.replies.forEach(reply => console.log(`   > ${this.tweetOwnerUsername === reply.tweetOwnerUsername ? "You" : "@" + reply.tweetOwnerUsername}: ${reply._content}`))
         this.replies.length === 0 ? "" : console.log("------------------------------------------------------")
     }
 }
