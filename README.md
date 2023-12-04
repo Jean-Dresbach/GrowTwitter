@@ -1,5 +1,4 @@
-
-<div align="center" style="color: #03b1fd; font-size: 30px">
+<div align="center">
 
 # GrowTwitter (back-end)
 
