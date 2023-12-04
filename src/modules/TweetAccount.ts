@@ -30,14 +30,16 @@ export abstract class TweetAccount {
     sendTweet(content: string): Tweet | null {
         try {
             if (this._isBanned) {
-                throw new Error("Your account was suspended")
+                throw new Error("Your account was suspended!")
             }
             const newTweet = new Tweet(content, "normal", this._username)
             this.tweets.push(newTweet)
-            console.log("New tweet added!")
+            console.log(`New tweet added by @${this._username}`)
+            console.log("------------------------------------------------------")
             return newTweet
         } catch (error) {
             console.log(error.message)
+            console.log("------------------------------------------------------")
             return null
         }
     }
@@ -45,15 +47,17 @@ export abstract class TweetAccount {
     follow(user: TweetAccount): void | null {
         try {
             if (this._isBanned) {
-                throw new Error("Your account was suspended")
+                throw new Error("Your account was suspended!")
             }
             if (user === this) {
                 throw new Error("You can't follow yourself!")
             }
             user.followers.push(this)
-            console.log(`You followed ${user.username}.`)
+            console.log(`You followed @${user.username}.`)
+            console.log("------------------------------------------------------")
         } catch (error) {
             console.log(error.message)
+            console.log("------------------------------------------------------")
             return null
         }
     }
@@ -63,15 +67,23 @@ export abstract class TweetAccount {
     showFollowers(): void | null {
         if (this._isBanned) {
             console.log("Your account was suspended")
+            console.log("------------------------------------------------------")
+            return null
+        }
+        if (this.followers.length === 0) {
+            console.log(`This user has no followers`)
+            console.log("------------------------------------------------------")
             return null
         }
         console.log("Followers:")
         this.followers.forEach(follower => follower.show())
+        console.log("------------------------------------------------------")
     }
 
     showTweets(): void | null {
         if (this._isBanned) {
             console.log("Your account was suspended")
+            console.log("------------------------------------------------------")
             return null
         }
         this.tweets.forEach(tweet => tweet.showReplies())

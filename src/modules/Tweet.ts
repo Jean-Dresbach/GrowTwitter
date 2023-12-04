@@ -30,6 +30,8 @@ export class Tweet {
         try {
             const newReply = new Tweet(content, "reply", username)
             this.replies.push(newReply)
+            console.log("Reply added")
+            console.log("------------------------------------------------------")
             return newReply
         } catch (error) {
             console.log(error.message)
@@ -40,12 +42,14 @@ export class Tweet {
     like(username: string): void | null {
         try {            
             if (this.likes.find(like => like.likesOwnerUsername === username)) {
-                throw new Error("This user already liked this tweet")
+                throw new Error("This user already liked this tweet!")
             }
             this.likes.push(new Like(username))
             console.log("Like added")
+            console.log("------------------------------------------------------")
         } catch (error) {
             console.log(error.message)
+            console.log("------------------------------------------------------")
             return null
         }
     }
