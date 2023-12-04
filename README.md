@@ -17,6 +17,8 @@ Object Oriented and its pillars). And, as the last challenge of this module, we 
 
 - User registration
 - Registration of Administrators
+- Ban a user
+- Unban a user
 - Tweet registration
 - Like the tweets
 - Reply to tweets
