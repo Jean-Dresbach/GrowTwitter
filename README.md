@@ -26,3 +26,14 @@ Object Oriented and its pillars). And, as the last challenge of this module, we 
 - Follow a user
 - Followers Display
 - Tweet feed
+
+## How to use :video_game:
+
+1. Install dependencies
+```bash
+yarn install
+```
+2. Run the project
+```bash
+yarn dev
+```
